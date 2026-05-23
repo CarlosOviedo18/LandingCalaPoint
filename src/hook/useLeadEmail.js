@@ -22,7 +22,8 @@ export function useLeadEmail(source = 'landing') {
 		setMessage('')
 
 		try {
-			const response = await fetch('/api/emails', {
+			const apiUrl = import.meta.env.VITE_API_URL || '/api'
+			const response = await fetch(`${apiUrl}/emails`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
