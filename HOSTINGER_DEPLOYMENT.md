@@ -30,7 +30,10 @@
    MYSQL_USER=tu-usuario-db
    MYSQL_PASSWORD=tu-contraseña-db
    MYSQL_DATABASE=nombre-de-tu-db
+   FRONTEND_URL=https://tudominio.com
    ```
+   
+   **⚠️ IMPORTANTE: `FRONTEND_URL` debe ser exactamente tu dominio** (sin barra final) para que CORS funcione
 
 ## Paso 2: En Hostinger (cPanel o SSH)
 
@@ -63,6 +66,19 @@
 El frontend ya está configurado para leer `VITE_API_URL` del archivo `.env.production`.
 El backend leerá todas las variables de su `.env`.
 
+**⚠️ Problema de CORS (por qué el frontend no ve el backend):**
+
+En producción, el frontend y backend están en puertos o dominios diferentes:
+- Frontend: `https://tudominio.com` (puerto 443, HTTPS)
+- Backend: `https://tudominio.com:3000/api` (puerto 3000, diferente origen)
+
+El navegador bloquea esto por seguridad, a menos que el backend envíe headers CORS específicos. 
+
+**Solución:** Ya está programada en el backend. Solo asegúrate de que:
+1. `FRONTEND_URL` en el `.env` del backend sea exacto: `https://tudominio.com` (sin barra)
+2. `VITE_API_URL` en el `.env.production` del frontend sea: `https://tudominio.com:3000/api`
+3. Reinicia el backend después de cambiar `FRONTEND_URL`
+
 ## Paso 4: Testing
 
 1. Abre tu sitio en `https://tudominio.com`
@@ -81,6 +97,8 @@ El backend leerá todas las variables de su `.env`.
 ### El formulario no envía datos
 - Verifica que `VITE_API_URL` en `.env.production` sea correcto
 - Abre DevTools (F12) → Console y busca errores CORS
+- **Error "CORS policy blocked"?** → Asegúrate de que `FRONTEND_URL` en el `.env` del backend sea tu dominio exacto
+- Reinicia el Node.js app en Hostinger después de cambiar `FRONTEND_URL`
 
 ### Base de datos no conecta
 - Verifica las credenciales en `.env`
