@@ -28,6 +28,9 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+// Servir archivos estáticos del frontend (React/Vite)
+app.use(express.static('dist'));
+
 app.get('/', (_request, response) => {
 	response.json({ message: 'Backend running on port 3000' });
 });
